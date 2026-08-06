@@ -1,3 +1,56 @@
 body {
-    background: lightblue;
+    font-family: monospace;
+    color: white;
+    background: rgb(45, 97, 24);
+    margin: 0;
+    box-sizing: border-box;
+}
+
+#container {
+    display: grid;
+    grid-template-rows: .3fr 2fr 1fr;
+    gap: 10px;
+    height: 100vh;
+    border: 4px solid black;
+    margin: .5rem;
+    padding: 2rem;
+
+}
+
+#topBanner {
+    border: 1px dotted rgb(201, 11, 137) ;
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+}
+
+#searchDiv {
+    display: grid;
+    padding: .5rem;
+    width: 100%;
+   
+}
+
+#searchInput {
+    padding: 1rem;
+    font-size: 1.5rem;
+}
+#metricDiv {
+    display: grid;
+    justify-items: end;
+    padding: .5rem;
+    
+}
+
+#metricToggle {
+    padding: 1rem;
+    font-size: 1.5rem;
+}
+
+#mainPanel {
+    border: 1px dotted yellow;
+    
+}
+
+#weeklyForecast {
+    border: 1px solid red;
 }
