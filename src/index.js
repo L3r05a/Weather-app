@@ -3,6 +3,11 @@ import "./styles.css";
 
 
 // DOM
+import sunny from "./images/sunny.svg"
+import rain from "./images/rain.svg"
+import cloudy from "./images/cloudy.svg"
+import partlycloudy from "./images/partlycloudy.svg"
+
 const mainCity = document.getElementById("city");
 const time = document.getElementById("time");
 const mainTemp = document.getElementById("temp");
@@ -12,18 +17,34 @@ const dayForecast = document.getElementById("dayForecast");
 const wind = document.getElementById("wind");
 const precipit = document.getElementById("precipit");
 const icon = document.getElementById("icon");
-const weekForecast = document.getElementById('weeklyForecast');
 
+const daysDiv = document.getElementById('daysDiv');
+
+const icons = {
+    'clear-day' : sunny,
+    rain : rain,
+    cloudy : cloudy,
+    'partly-cloudy-day' : partlycloudy,
+    'partly-cloudy-night' : cloudy,
+};
+
+//Main Panel
 function displayMain (weatherInfo) {
 mainCity.textContent = weatherInfo.city;
-time.textContent = formatTime(weatherInfo.time);
-mainTemp.textContent = `Temperature: ${weatherInfo.temp}`;
-feelsLike.textContent = `Feels like ${weatherInfo.feelsLike}`;
+
+icon.textContent = "";
+const img = document.createElement("img");
+img.id = "dayWeatherIcon"
+img.src = icons[weatherInfo.icon]
+icon.appendChild(img);
+
+time.textContent = `Time: ${formatTime(weatherInfo.time)}`;
+mainTemp.textContent = `Temperature: ${weatherInfo.temp} degrees`;
+feelsLike.textContent = `Feels like: ${weatherInfo.feelsLike} degrees`;
 conditions.textContent = `Now: ${weatherInfo.current}`;
 dayForecast.textContent = `Today: ${weatherInfo.dayForecast}`;
-precipit.textContent = `Rain ${weatherInfo.precipProb}%`;
-wind.textContent = `Wind ${weatherInfo.wind}`;
-icon.textContent = "Icon placeholder " + weatherInfo.icon
+precipit.textContent = `Rain: ${weatherInfo.precipProb}%`;
+wind.textContent = `Wind: ${weatherInfo.wind}`;
 
 };
 
@@ -31,17 +52,38 @@ function formatTime(time){
     return time.slice(0,5);
 }
 
-function displayWeek(weatherInfoDays){
+function formatDate (date) {
+    return new Date(date).toLocaleDateString('en-US', {
+        weekday: 'long',
+        timeZone: 'UTC'
+    })
+}
 
- console.log(weatherInfoDays);
+//7 days forecast
+function displayWeek(forecast){
+
+daysDiv.textContent = "";
  
-// for each item in the array
-const week = weatherInfoDays.slice(0,7).forEach((item, index) => {console.log(`item ${index + 1}: ${item.datetime}`)})
-//create a card with:
-//datetime (day of the week format)
-//icon
-//temp
-// append the card to id="daysDiv" 
+//Selects nexy 7 days
+forecast.slice(1,8).forEach((item) => {
+//creates card 
+const card = document.createElement('div');
+//card contents
+card.textContent = 
+`${formatDate(item.datetime)}
+- Temp ${item.temp}`;
+
+//icons
+const img = document.createElement("img");
+img.id = "weatherIcon"
+img.src = icons[item.icon]
+
+daysDiv.appendChild(card)
+card.appendChild(img);
+
+
+});
+ console.log(forecast);
 }
 
 // EVENTS
@@ -60,6 +102,7 @@ units = units === "metric" ? "us" : "metric"
 const updatedUnit = await getWeather(currentCity, units);
 
 displayMain(updatedUnit)
+displayWeek(updatedUnit.days)
 
     } catch(error) {
         console.error(error);
@@ -113,7 +156,7 @@ precipProb : weatherData.currentConditions.precipprob,
 days : weatherData.days,
 
 };
-// console.log(weatherData.days[0].conditions)
+console.log(weatherData)
 // console.log(weatherInfo.days)
 return weatherInfo;
     

@@ -1,7 +1,7 @@
 body {
     font-family: monospace;
     color: white;
-    background: rgb(45, 97, 24);
+    background: rgb(135, 141, 138);
     margin: 0;
     box-sizing: border-box;
 }
@@ -11,14 +11,14 @@ body {
     grid-template-rows: .3fr 2fr 1fr;
     gap: 10px;
     height: 100vh;
-    border: 4px solid black;
+    /* border: 4px solid black; */
     margin: .5rem;
     padding: 2rem;
 
 }
 
 #topBanner {
-    border: 1px dotted rgb(201, 11, 137) ;
+    /* border: 1px dotted rgb(201, 11, 137) ; */
     display: grid;
     grid-template-columns: 3fr 1fr;
 }
@@ -33,6 +33,8 @@ body {
 #searchInput {
     padding: 1rem;
     font-size: 1.5rem;
+    border-radius: 5px;
+    border: none;
 }
 #metricDiv {
     display: grid;
@@ -44,13 +46,42 @@ body {
 #metricToggle {
     padding: 1rem;
     font-size: 1.5rem;
+    border-radius: 5px;
+    border: none;
 }
 
 #mainPanel {
-    border: 1px dotted yellow;
+    background-color: rgb(14, 92, 14);
+    padding: 1rem;
+    display: grid;
+    grid-auto-flow: row;
     
 }
 
 #weeklyForecast {
-    border: 1px solid red;
+    padding: 1rem;
+    background-color: rgb(14, 95, 14);
+}
+
+#daysDiv {
+    padding: 1rem;
+    display: grid;
+    grid-auto-flow: row;
+    gap: 5px;
+
+   
+}
+
+#dayWeatherIcon {
+
+    width : 30px;
+    height: 30px
+
+}
+
+#weatherIcon {
+    display: inline-block;
+    margin-left: 10px;
+    width : 20px;
+    height: 20px
 }
