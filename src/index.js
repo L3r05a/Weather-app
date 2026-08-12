@@ -2,12 +2,6 @@
 import "./styles.css";
 
 
-// DOM
-import sunny from "./images/sunny.svg"
-import rain from "./images/rain.svg"
-import cloudy from "./images/cloudy.svg"
-import partlycloudy from "./images/partlycloudy.svg"
-
 const mainCity = document.getElementById("city");
 const time = document.getElementById("time");
 const mainTemp = document.getElementById("temp");
@@ -20,29 +14,28 @@ const icon = document.getElementById("icon");
 
 const daysDiv = document.getElementById('daysDiv');
 
-const icons = {
-    'clear-day' : sunny,
-    rain : rain,
-    cloudy : cloudy,
-    'partly-cloudy-day' : partlycloudy,
-    'partly-cloudy-night' : cloudy,
-};
+//Main Panel Render
+async function displayMain (weatherInfo) {
 
-//Main Panel
-function displayMain (weatherInfo) {
 mainCity.textContent = weatherInfo.city;
 
+//dynamic icons import
+const iconModule = await import(`./images/${weatherInfo.icon}.svg`);
+
 icon.textContent = "";
+
 const img = document.createElement("img");
 img.id = "dayWeatherIcon"
-img.src = icons[weatherInfo.icon]
+
+//the value generqated by Webpack for the asset
+img.src = iconModule.default;
 icon.appendChild(img);
 
-time.textContent = `Time: ${formatTime(weatherInfo.time)}`;
+time.textContent = `Local time: ${formatTime(weatherInfo.time)}`;
 mainTemp.textContent = `Temperature: ${weatherInfo.temp} degrees`;
 feelsLike.textContent = `Feels like: ${weatherInfo.feelsLike} degrees`;
 conditions.textContent = `Now: ${weatherInfo.current}`;
-dayForecast.textContent = `Today: ${weatherInfo.dayForecast}`;
+dayForecast.textContent = `Later: ${weatherInfo.dayForecast}`;
 precipit.textContent = `Rain: ${weatherInfo.precipProb}%`;
 wind.textContent = `Wind: ${weatherInfo.wind}`;
 
@@ -60,30 +53,30 @@ function formatDate (date) {
 }
 
 //7 days forecast
-function displayWeek(forecast){
+async function displayWeek(forecast){
 
 daysDiv.textContent = "";
- 
-//Selects nexy 7 days
-forecast.slice(1,8).forEach((item) => {
-//creates card 
-const card = document.createElement('div');
-//card contents
-card.textContent = 
-`${formatDate(item.datetime)}
-- Temp ${item.temp}`;
 
-//icons
+const week = forecast.slice(1,8);
+
+for (const item of week) {
+
+const card = document.createElement('div');
+
+card.textContent = 
+`${formatDate(item.datetime)} - Temp ${item.temp}`;
+
+const iconModule = await import(`./images/${item.icon}.svg`);
+
 const img = document.createElement("img");
-img.id = "weatherIcon"
-img.src = icons[item.icon]
+img.id = "dayWeatherIcon";
+img.src = iconModule.default;
 
 daysDiv.appendChild(card)
 card.appendChild(img);
 
-
-});
- console.log(forecast);
+}
+ 
 }
 
 // EVENTS
@@ -101,8 +94,8 @@ metricToggle.addEventListener("click", async () => {
 units = units === "metric" ? "us" : "metric"
 const updatedUnit = await getWeather(currentCity, units);
 
-displayMain(updatedUnit)
-displayWeek(updatedUnit.days)
+await displayMain(updatedUnit)
+await displayWeek(updatedUnit.days)
 
     } catch(error) {
         console.error(error);
@@ -119,9 +112,9 @@ const weather = await getWeather(e.target.value, units);
 
 currentCity = e.target.value;
 
-displayMain(weather)
+await displayMain(weather)
 
-displayWeek(weather.days)
+await displayWeek(weather.days)
 
 
     } catch(error){
@@ -156,8 +149,7 @@ precipProb : weatherData.currentConditions.precipprob,
 days : weatherData.days,
 
 };
-console.log(weatherData)
-// console.log(weatherInfo.days)
+
 return weatherInfo;
     
 
