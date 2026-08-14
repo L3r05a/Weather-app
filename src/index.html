@@ -13,13 +13,16 @@
 
 <!-- search and temp metric toggle button -->
 <div id="topBanner">
+    <form action="" id="searchForm">
     <div id="searchDiv">
         <input type="search" id="searchInput" placeholder="Enter Country">
-    <div id="errorMessage"></div>
+        <button id="searchButton" type="submit">search</button>
     </div>
+    </form>
     <div id="metricDiv">
         <button id="metricToggle">C/F</button>
     </div>
+    <div id="errorMessage"></div>
 </div>
 
 
@@ -27,14 +30,17 @@
 <div id="mainPanel">
     
     <div id="city"></div>
-    <div id="icon"></div>
+    <div id="time"></div>
     <div id="temp"></div>
-    <div id="feelsLIke"></div>
     <div id="conditions"></div>
-    <div id="dayForecast"></div>
+    <div id="icon"></div>
+    <div id="feelsLike"></div>
+    <div id="weatherDetails">
     <div id="precipit"></div>
     <div id="wind"></div>
-    <div id="time"></div>
+    </div>
+    <div id="dayForecast"></div>
+    
     <div id="loading"></div>
 </div>
 

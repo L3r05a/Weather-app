@@ -14,7 +14,8 @@ const weatherInfo = {
 
 city : weatherData.address,
 time : weatherData.currentConditions.datetime,
-temp : weatherData.currentConditions.temp,
+tempmax: weatherData.days[0].tempmax,
+tempmin: weatherData.days[0].tempmin,
 feelsLike : weatherData.currentConditions.feelslike,
 icon : weatherData.currentConditions.icon,
 current : weatherData.currentConditions.conditions,

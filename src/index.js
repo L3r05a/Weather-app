@@ -1,17 +1,26 @@
 import "./styles.css";
-import { errorDisplay, displayMain, displayWeek } from "./display";
+import { 
+    errorDisplay,
+    displayMain, 
+    displayWeek,
+    showLoading,
+    hideLoading } from "./display";
 import { getWeather } from "./api";
-import { showLoading, hideLoading } from "./display";
+
+
+
 
 let currentCity = "";
 let units = "metric";
 
-export const searchCountry = document.getElementById("searchInput");
 const metricToggle = document.getElementById("metricToggle");
+const searchForm = document.getElementById("searchForm");
+
+const searchCountry = document.getElementById("searchInput");
 
 // units toggle listener
 metricToggle.addEventListener("click", async () => {
-    const searchInput = document.getElementById('searchInput');
+    
 
     if (!currentCity){
         errorDisplay ('Please type in a city')
@@ -36,38 +45,45 @@ await displayWeek(updatedUnit.days)
 })
 
 //search
-searchCountry.addEventListener('change', async (e) => {
+searchForm.addEventListener('submit', async (e) => {
+e.preventDefault();
 
-    if (!e.target.value){
-    
-        errorDisplay ('Please type in a city.')
-        return;
-    };
+const city = searchCountry.value;
 
-showLoading();
+if (!city){
+    errorDisplay ('Please type in a city.')
+    return;
+};
+
 errorDisplay("");
+
+queryDisplay(city, units);
+
+});
+
+export async function queryDisplay(city, units) {
+
+showLoading(city);
     
 try{
 
-const weather = await getWeather(e.target.value, units);
+const weather = await getWeather(city, units);
 
-currentCity = e.target.value;
+currentCity = city;
 
 await displayMain(weather)
 
 await displayWeek(weather.days)
 
+} catch(error){
+    console.error(error)
+    errorDisplay(error.message);
+    searchCountry.value = ""
+}
+finally {
+    hideLoading();
+}
 
+}
 
-
-    } catch(error){
-        console.error(error)
-        errorDisplay(error.message);
-        searchCountry.value = ""
-    }
-    finally {
-        hideLoading();
-    }
-
-});
-
+queryDisplay("Dublin", units);
